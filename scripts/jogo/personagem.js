@@ -1,37 +1,47 @@
-class Personagem extends Animacao{
-  constructor(matriz, imagem, xTela, larguraPersonagem, alturaPersonagem,
-               larguraSprite, alturaSprite){
-  super(matriz, imagem, xTela, larguraPersonagem, alturaPersonagem, larguraSprite, alturaSprite);
-  this. yInicial = height - this.alturaPersonagem;
-  this.y = this.yInicial;
-  this.velocidadePulo = 0;
-  this.gravidade = 3;
+class Personagem extends Animacao {
+  constructor(matriz, imagem, x, variacaoY, largura, altura, larguraSprite, alturaSprite){
+    super(matriz, imagem, x, variacaoY, largura, altura, larguraSprite, alturaSprite);
+    this.variacaoY = variacaoY;
+    this.yInicial = height - this.altura - this.variacaoY;
+    this.y = this.yInicial;
     
-  }
-
-  pula(){
-    this.velocidadePulo = - 30;
+    this.velocidadeDoPulo = 0;
+    this.gravidade = 6;
+    this.alturaDoPulo = -50
+    this.pulos = 0
   }
   
-  aplicaGravidade(){
-    this.y = this.y + this.velocidadePulo
-    this.velocidadePulo = this.velocidadePulo + this.gravidade
+  pula() {
+    if(this.pulos < 2) {
+      this.velocidadeDoPulo = this.alturaDoPulo
+      this.pulos++
+    }
+  }
+  
+  aplicaGravidade() {
+    this.y = this.y + this.velocidadeDoPulo
+    this.velocidadeDoPulo = this.velocidadeDoPulo + this.gravidade
     
     if(this.y > this.yInicial){
       this.y = this.yInicial
-  }
-  }
-  estaColidindo(inimigo) {
-    const colisao = collideRectRect(
-                    this.x,
-                    this.y,
-                    this.largura,
-                    this.altura, 
-                    inimigo.x,
-                    inimigo.y,
-                    inimigo.largura,
-                    inimigo.altura);
-  return colisao;
+      this.pulos = 0
+    }
   }
   
+  estaColidindo(inimigo) {
+    const precisao = .7
+    const colisao = collideRectRect(
+      this.x, 
+      this.y, 
+      this.largura * precisao, 
+      this.altura * precisao,
+      inimigo.x,
+      inimigo.y,
+      inimigo.largura * precisao,
+      inimigo.altura * precisao
+    );
+    
+    return colisao;
+  }
+
 }
