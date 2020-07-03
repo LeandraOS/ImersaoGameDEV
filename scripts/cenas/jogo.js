@@ -1,8 +1,8 @@
 class Jogo {
   constructor() {
-    this.inimigoAtual = 0;
-
+    this.inimigoAtual = 0
   }
+
   setup() {
     cenario = new Cenario(imagemCenario, 3);
     pontuacao = new Pontuacao()
@@ -16,14 +16,17 @@ class Jogo {
     inimigos.push(inimigoGrande)
     inimigos.push(inimigoVoador)
   }
+
   keyPressed(key) {
     if (key === 'ArrowUp') {
       personagem.pula()
       somDoPulo.play()
-
     }
   }
+
   draw() {
+    const inimigo = inimigos[this.inimigoAtual]
+    const inimigoVisivel = inimigo.x < -inimigo.largura
     cenario.exibe();
     cenario.move();
 
@@ -32,24 +35,20 @@ class Jogo {
     personagem.exibe();
     personagem.aplicaGravidade();
 
-    const inimigo = inimigos[this.inimigoAtual];
-    const inimigoVisivel = inimigo.x < -inimigo.largura;
-
-    inimigo.move();
-    inimigo.exibe();
-
-    if (inimigoVisivel) {
-      this.inimigoAtual++;
-      if (this.inimigoAtual > 2) {
-        this.inimigoAtual = 0;
+    inimigo.exibe()
+    inimigo.move()
+    
+    if(inimigoVisivel) {
+      this.inimigoAtual++
+      if(this.inimigoAtual > 2) {
+        this.inimigoAtual = 0
       }
-      inimigo.velocidade = parseInt(random(10, 30));
+      inimigo.alteraVelocidade(parseInt(random(10, 20)))
     }
 
     if (personagem.estaColidindo(inimigo)) {
-      image(imagemGameOver, width / 2 - 200, height / 3)
+      image(imagemGameOver, width/2 - 200, height/3)      
       noLoop()
-
     }
   }
 }
